@@ -37,9 +37,8 @@ fn main() {
         second_min = a.parse::<i32>().unwrap();
         second_max = b.parse::<i32>().unwrap();
 
-        let is_contained = (first_min <= second_min && second_max <= first_max)
-            || (second_min <= first_min && first_max <= second_max);
-        if is_contained {
+        let overlaps = !(first_max < second_min || second_max < first_min);
+        if overlaps {
             counter += 1;
         }
     }
