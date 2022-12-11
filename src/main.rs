@@ -3,17 +3,45 @@ use std::fs;
 fn main() {
     let input_data = fs::read_to_string("src/input.txt").expect("couldn't open file");
 
-    let mut max_calories = 0;
-    let mut tmp_sum = 0;
+    let mut first_min;
+    let mut first_max;
+    let mut second_min;
+    let mut second_max;
+    let mut first_range;
+    let mut second_range;
+    let mut a;
+    let mut b;
+    let mut counter = 0;
+
     for line in input_data.lines() {
-        if line == "" {
-            if tmp_sum > max_calories {
-                max_calories = tmp_sum;
-            }
-            tmp_sum = 0;
-            continue;
+        (first_range, second_range) = line.trim().split_at(line.find(',').unwrap());
+        (a, b) = first_range.split_at(first_range.find('-').unwrap());
+
+        let filtered = b.chars().filter(|&c| c != '-').collect::<String>();
+        b = &filtered;
+        
+        first_min = a.parse::<i32>().unwrap();
+        first_max = b.parse::<i32>().unwrap();
+
+        let filtered = second_range
+            .chars()
+            .filter(|&c| c != ',')
+            .collect::<String>();
+        second_range = &filtered;
+
+        (a, b) = second_range.split_at(second_range.find('-').unwrap());
+        
+        let filtered = b.chars().filter(|&c| c != '-').collect::<String>();
+        b = &filtered;
+        
+        second_min = a.parse::<i32>().unwrap();
+        second_max = b.parse::<i32>().unwrap();
+
+        let is_contained = (first_min <= second_min && second_max <= first_max)
+            || (second_min <= first_min && first_max <= second_max);
+        if is_contained {
+            counter += 1;
         }
-        tmp_sum += line.parse::<i32>().unwrap();
     }
-    println!("most calories: {}", max_calories);
+    println!("count: {}", counter);
 }
