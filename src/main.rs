@@ -46,10 +46,15 @@ fn main() {
         let from_stack_index = line[3].to_string().parse::<usize>().unwrap() - 1;
         let to_stack_index = line[5].to_string().parse::<usize>().unwrap() - 1;
 
+        let mut tmp_vec:Vec<char> = vec![];
         for _ in 0..line[1].to_string().parse::<usize>().unwrap() {
             let tmp = stacks[from_stack_index].pop().unwrap();
-            stacks[to_stack_index].push(tmp);
+            tmp_vec.push(tmp);
         }
+
+        for _ in (0..tmp_vec.len()).rev() {
+            stacks[to_stack_index].push(tmp_vec.pop().unwrap());
+        }        
     }
 
     //print the result
