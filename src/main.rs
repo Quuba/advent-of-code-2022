@@ -2,18 +2,50 @@ use std::fs;
 
 fn main() {
     let input_data = fs::read_to_string("src/input.txt").expect("couldn't open file");
+    let input_chars = input_data.chars().collect::<Vec<char>>();
+    let mut final_val = 0;
 
-    let mut max_calories = 0;
-    let mut tmp_sum = 0;
-    for line in input_data.lines() {
-        if line == "" {
-            if tmp_sum > max_calories {
-                max_calories = tmp_sum;
-            }
-            tmp_sum = 0;
-            continue;
-        }
-        tmp_sum += line.parse::<i32>().unwrap();
+    let mut buffer: [char; 4] = [
+        input_chars[0],
+        input_chars[1],
+        input_chars[2],
+        input_chars[3],
+    ];
+    
+    if is_buffer_unique(&buffer){
+        final_val = 4;
+        println!("{final_val}");
+        return;
     }
-    println!("most calories: {}", max_calories);
+
+    for i in 4..input_chars.len() {
+        shift_buffer(&mut buffer, input_chars[i]);
+        if is_buffer_unique(&buffer) {
+            final_val = i+1;
+            break;
+        }
+    }
+
+    println!("{final_val}");
+
+}
+fn shift_buffer(buffer: &mut [char; 4], new_char: char) {
+    for i in 0..3 {
+        buffer[i] = buffer[i + 1];
+    }
+    buffer[3] = new_char;
+}
+
+fn is_buffer_unique(buffer: &[char; 4]) -> bool {
+    for i in 0..3 {
+        for j in 0..4 {
+            if j == i {
+                continue;
+            }
+            if buffer[i] == buffer[j] {
+                return false;
+            }
+        }
+    }
+    return true;
 }
