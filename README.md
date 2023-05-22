@@ -7,5 +7,5 @@
 ${number}-1 => easier version
 ${number}-2 => harder version
 
-ex. branch "03-2" is the harder version of day 3 excercise
+ex. branch "03-2" contains the harder version of excercise from day 3
 ```
